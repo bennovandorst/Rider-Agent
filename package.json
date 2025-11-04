@@ -1,0 +1,20 @@
+{
+  "name": "rider-agent",
+  "version": "0.0.1",
+  "description": "",
+  "license": "ISC",
+  "author": "Benno van Dorst",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@z0mt3c/f1-telemetry-client": "^2.0.0",
+    "amqplib": "^0.10.9",
+    "chalk": "^5.6.2",
+    "dotenv": "^17.2.3",
+    "figlet": "^1.9.3"
+  }
+}
