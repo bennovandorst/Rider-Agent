@@ -38,7 +38,7 @@ export class MessagingService {
                     this.connections[simRigId] = conn;
                     this.channels[simRigId] = channel;
 
-                    logSuccess(`Connected to RabbitMQ`);
+                    logSuccess(`Connected to RabbitMQ on ${this.uri}`);
 
                     resolve();
                 } catch (err) {
