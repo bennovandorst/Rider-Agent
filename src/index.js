@@ -7,6 +7,8 @@ import { constants } from '@z0mt3c/f1-telemetry-client';
 import dotenv from "dotenv";
 import figlet from "figlet";
 import chalk from "chalk";
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config({quiet: true});
 const { PACKETS } = constants;
@@ -15,10 +17,6 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-
-const banner = await figlet.text("Rider Agent");
-console.log(chalk.greenBright(banner));
-console.log(chalk.dim('By Benno van Dorst - https://github.com/bennovandorst\n'));
 
 
 async function startSimRig(simrigId) {
@@ -47,18 +45,22 @@ async function startSimRig(simrigId) {
     });
 
     telemetry.start();
-
-    process.on('SIGINT', () => {
-        telemetry.stop();
-        logInfo('\nGracefully shutting down...');
-        rl.close();
-        process.exit(0);
-    });
 }
 
 const simRigId = process.env.SIMRIG_ID;
+const banner = await figlet.text("Rider Agent");
+
+const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf-8'));
+const version = packageJson.version || '0.0.0';
+
+console.log(chalk.greenBright(banner));
+console.log(chalk.greenBright(`v${version}\n`))
+console.log(chalk.dim('By Benno van Dorst - https://github.com/bennovandorst'));
+console.log(chalk.gray('─────────────────────────────────────────────────────────'));
+
 if (simRigId) {
+    console.log(chalk.cyanBright(`Using SimRig: ${simRigId}\n`));
     startSimRig(simRigId);
 } else {
-    rl.question('Which SimRig are we using? (1 or 2): ', startSimRig);
+    rl.question(chalk.cyanBright('Which SimRig are we using? (1 or 2): '), startSimRig);
 }

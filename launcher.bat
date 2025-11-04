@@ -1,5 +1,7 @@
 @echo off
-cd "C:\Rider-Agent"
+cd /d "C:\Rider-Agent"
 call git pull
 call npm install
-call npm start
+start node src/index.js
+if not "%~1"=="" start "" %*
+exit

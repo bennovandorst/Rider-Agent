@@ -100,3 +100,15 @@ RABBITMQ_URI=amqp://username:password@localhost:5672
 2. When prompted, select a SimRig (1 or 2)
 
 3. The server will start listening for telemetry data and send it to the RabbitMQ queues.
+
+### Adding Rider-Agent to Steam Advanced Launch Options
+
+1. Open Steam → Library → Right-click **EA F1** → Properties → Launch Options.
+
+2. Add the following line:
+
+   ```
+   cmd.exe /k "C:\Rider-Agent\launcher.bat" %command%
+   ```
+
+3. Close the properties window and launch the game.

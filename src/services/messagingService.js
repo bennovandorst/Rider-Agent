@@ -42,7 +42,7 @@ export class MessagingService {
 
                     resolve();
                 } catch (err) {
-                    logError(`Connection error: ${err.message}`);
+                    logError(`RabbitMQ Connection Error: ${err.message}`);
                     setTimeout(connectAndSetup, 5000);
                 }
             };
