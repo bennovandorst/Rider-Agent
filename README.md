@@ -14,7 +14,7 @@ Sends telemetry data from SimRig to RabbitMQ
 
 ## Overview
 
-Rider-Server connects to EA F1 games via UDP telemetry. It uses RabbitMQ for message queuing to ensure reliable data delivery.
+Rider-Agent connects to EA F1 games via UDP telemetry. It uses RabbitMQ for message queuing to ensure reliable data delivery.
 
 ## Features
 
@@ -25,7 +25,7 @@ Rider-Server connects to EA F1 games via UDP telemetry. It uses RabbitMQ for mes
 
 ## Architecture
 
-Rider-Server consists of the following components:
+Rider-Agent consists of the following components:
 
 1. **Telemetry Service**: Connects to EA F1 games via UDP and receives telemetry data
 2. **Messaging Service**: Handles communication with RabbitMQ for message queuing
@@ -42,6 +42,26 @@ EA F1 Game (UDP) → Rider-Agent → Messaging Service (RabbitMQ) → Rider-Serv
 - [Git](https://git-scm.com/) (for updates)
 
 ## Installation
+
+### Windows
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/bennovandorst/Rider-Agent.git C:\Rider-Agent
+   ```
+
+2. Install dependencies:
+   ```
+   cd C:\Rider-Agent
+   npm install
+   ```
+
+3. Run the launcher:
+   ```
+   launcher.bat
+   ```
+
+### macOS/Linux
 
 1. Clone the repository:
    ```
