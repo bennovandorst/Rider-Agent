@@ -7,6 +7,7 @@ import { constants } from '@z0mt3c/f1-telemetry-client';
 import dotenv from "dotenv";
 import figlet from "figlet";
 import chalk from "chalk";
+import axios from "axios";
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
@@ -16,6 +17,8 @@ const { PACKETS } = constants;
 const isDev = process.env.DEV_MODE === 'true';
 const require = createRequire(import.meta.url);
 const gitRev = require('git-rev-sync');
+const branch = gitRev.branch();
+const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf-8'));
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -53,20 +56,33 @@ async function startSimRig(simrigId) {
         });
     });
 
+    setInterval(() => {
+        sendStatusUpdate(simrigId, {
+            timestamp: Date.now(),
+            devMode: isDev,
+            branch: branch,
+            version: packageJson.version,
+        });
+    }, 3000);
+
     telemetry.start();
 }
 
+async function sendStatusUpdate(simrigId, data) {
+    try {
+        await axios.post(`${process.env.PANEL_URL}/api/simrig/${simrigId}/status`, data);
+    } catch (error) {
+        logError("Rider-Panel: " + error);
+    }
+}
+
 const simRigId = process.env.SIMRIG_ID;
-const branchSync = gitRev.branch();
 const banner = await figlet.text("Rider Agent");
-
-
-const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf-8'));
 
 console.log(chalk.greenBright(banner));
 const badge = isDev
-    ? chalk.black.bgYellowBright.bold(' DEVELOPMENT MODE ' + chalk.white.bgBlack.bold(` ${packageJson.name}@${branchSync} `))
-    : chalk.black.bgGreenBright.bold(` v${packageJson.version} ` + chalk.black.bgWhite.bold(` ${packageJson.name}@${branchSync} `));
+    ? chalk.black.bgYellowBright.bold(' DEVELOPMENT MODE ' + chalk.white.bgBlack.bold(` ${packageJson.name}@${branch} `))
+    : chalk.black.bgGreenBright.bold(` v${packageJson.version} ` + chalk.black.bgWhite.bold(` ${packageJson.name}@${branch} `));
 
 console.log(' ' + badge + '\n');
 console.log(chalk.dim('By Benno van Dorst - https://github.com/bennovandorst'));
