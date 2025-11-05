@@ -58,7 +58,7 @@ const banner = await figlet.text("Rider Agent");
 
 const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf-8'));
 
-console.log(chalk.greenBright(banner ));
+console.log(chalk.greenBright(banner));
 const badge = isDev
     ? chalk.black.bgYellowBright.bold(' DEVELOPMENT MODE ' + chalk.white.bgBlack.bold(` ${packageJson.name}@${branchSync} `))
     : chalk.black.bgGreenBright.bold(` v${packageJson.version} ` + chalk.black.bgWhite.bold(` ${packageJson.name}@${branchSync} `));
@@ -72,7 +72,7 @@ if (simRigId) {
     startSimRig(simRigId);
 } else {
     rl.question(
-        chalk.cyanBright(`\u2753  Which SimRig are we using? (1 or 2)`),
+        chalk.cyanBright(`\u2753  Which SimRig are we using? (1, 2, or 3)`),
         answer => {
             const id = (answer || '').trim();
             startSimRig(id);
