@@ -1,7 +1,7 @@
 import { CONFIG } from './config/config.js';
 import { MessagingService } from './services/messagingService.js';
 import { TelemetryService } from './services/telemetryService.js';
-import {logDebug, logError} from './utils/logger.js';
+import { logDebug, logError } from './utils/logger.js';
 import readline from 'readline';
 import { constants } from '@z0mt3c/f1-telemetry-client';
 import dotenv from "dotenv";
