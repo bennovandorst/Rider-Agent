@@ -9,9 +9,13 @@ import figlet from "figlet";
 import chalk from "chalk";
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
 
 dotenv.config({quiet: true});
 const { PACKETS } = constants;
+const isDev = process.env.DEV_MODE === 'true';
+const require = createRequire(import.meta.url);
+const gitRev = require('git-rev-sync');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -48,19 +52,30 @@ async function startSimRig(simrigId) {
 }
 
 const simRigId = process.env.SIMRIG_ID;
+const branchSync = gitRev.branch();
 const banner = await figlet.text("Rider Agent");
 
-const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf-8'));
-const version = packageJson.version || '0.0.0';
 
-console.log(chalk.greenBright(banner));
-console.log(chalk.greenBright(`v${version}\n`))
+const packageJson = JSON.parse(fs.readFileSync(path.resolve('./package.json'), 'utf-8'));
+
+console.log(chalk.greenBright(banner ));
+const badge = isDev
+    ? chalk.black.bgYellowBright.bold(' DEVELOPMENT MODE ' + chalk.white.bgBlack.bold(` ${packageJson.name}@${branchSync} `))
+    : chalk.black.bgGreenBright.bold(` v${packageJson.version} ` + chalk.black.bgWhite.bold(` ${packageJson.name}@${branchSync} `));
+
+console.log(' ' + badge + '\n');
 console.log(chalk.dim('By Benno van Dorst - https://github.com/bennovandorst'));
 console.log(chalk.gray('─────────────────────────────────────────────────────────'));
 
 if (simRigId) {
-    console.log(chalk.cyanBright(`Using SimRig: ${simRigId}\n`));
+    console.log(chalk.cyanBright(`🚀 Using SimRig ${simRigId}\n`));
     startSimRig(simRigId);
 } else {
-    rl.question(chalk.cyanBright('Which SimRig are we using? (1 or 2): '), startSimRig);
+    rl.question(
+        chalk.cyanBright(`\u2753  Which SimRig are we using? (1 or 2)`),
+        answer => {
+            const id = (answer || '').trim();
+            startSimRig(id);
+        }
+    );
 }

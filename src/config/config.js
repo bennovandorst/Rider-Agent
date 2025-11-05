@@ -31,6 +31,23 @@ export const CONFIG = {
       sessionhistoryQueue: 'simrig2_sessionhistory',
       tyresetsQueue: 'simrig2_tyresets',
       motionexQueue: 'simrig2_motionex',
-    }
+    },
+    '3': {
+      eventQueue: 'simrig3_event',
+      motionQueue: 'simrig3_motion',
+      carsetupsQueue: 'simrig3_carsetups',
+      lapdataQueue: 'simrig3_lapdata',
+      sessionQueue: 'simrig3_session',
+      participantsQueue: 'simrig3_participants',
+      cartelemetryQueue: 'simrig3_cartelemetry',
+      carstatusQueue: 'simrig3_carstatus',
+      finalclassificationQueue: 'simrig3_finalclassification',
+      lobbyinfoQueue: 'simrig3_lobbyinfo',
+      cardamageQueue: 'simrig3_cardamage',
+      sessionhistoryQueue: 'simrig3_sessionhistory',
+      tyresetsQueue: 'simrig3_tyresets',
+      motionexQueue: 'simrig3_motionex',
+    },
+
   }
 };
