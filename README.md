@@ -14,7 +14,7 @@ Sends telemetry data from SimRig to RabbitMQ
 
 ## Overview
 
-Rider-Agent connects to EA F1 games via UDP telemetry. It uses RabbitMQ for message queuing to ensure reliable data delivery.
+Rider Agent connects to EA F1 games via UDP telemetry. It uses RabbitMQ for message queuing to ensure reliable data delivery.
 
 ## Features
 
