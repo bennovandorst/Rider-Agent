@@ -85,9 +85,10 @@ The configuration for the queues is defined in `src/config/config.js`:
 
 `.env`:
 ```env
-SIMRIG_ID=1 # Set to 1 or 2 depending on the SimRig
+SIMRIG_ID=1 # Set to 1, 2 or 3 depending on the SimRig
 UDP_PORT=20777
 RABBITMQ_URI=amqp://username:password@localhost:5672
+DEV_MODE=false
 ```
 
 ## Usage
