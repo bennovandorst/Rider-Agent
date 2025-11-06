@@ -71,6 +71,7 @@ async function startSimRig(simrigId) {
                 devMode: isDev,
                 branch: branch,
                 version: packageJson.version,
+                isInUse: telemetry.isInUse(),
             });
         }, 3000);
     }
