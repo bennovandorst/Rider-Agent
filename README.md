@@ -100,7 +100,7 @@ DEV_MODE=false
    npm start
    ```
 
-2. When prompted, select a SimRig (1 or 2)
+2. If prompted, select a SimRig (1, 2 or 3)
 
 3. The server will start listening for telemetry data and send it to the RabbitMQ queues.
 
