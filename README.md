@@ -89,6 +89,7 @@ SIMRIG_ID=1 # Set to 1, 2 or 3 depending on the SimRig
 UDP_PORT=20777
 RABBITMQ_URI=amqp://username:password@localhost:5672
 PANEL_URL=http://localhost:3000 # URL of the Rider Panel remove if not used
+PANEL_SECRET=your_panel_secret # Secret for the Rider Panel remove if not used
 DEV_MODE=false
 ```
 
