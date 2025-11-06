@@ -2,8 +2,12 @@ import amqp from 'amqplib';
 import { logError, logSuccess } from '../utils/logger.js';
 
 export class MessagingService {
-    constructor(uri) {
-        this.uri = uri;
+    constructor(ip, port, vhost, user, password) {
+        this.ip = ip;
+        this.port = port;
+        this.vhost = vhost;
+        this.user = user;
+        this.password = password;
         this.connections = {};
         this.channels = {};
         this.connectedPromises = {};
@@ -17,7 +21,7 @@ export class MessagingService {
         this.connectedPromises[simRigId] = new Promise(async (resolve) => {
             const connectAndSetup = async () => {
                 try {
-                    const conn = await amqp.connect(this.uri);
+                    const conn = await amqp.connect(`amqp://${this.user}:${this.password}@${this.ip}:${this.port}${this.vhost}`);
 
                     conn.on('error', (err) => {
                         logError(`RabbitMQ error for SimRig: ${err.message}`);
@@ -38,7 +42,7 @@ export class MessagingService {
                     this.connections[simRigId] = conn;
                     this.channels[simRigId] = channel;
 
-                    logSuccess(`Connected to RabbitMQ on ${this.uri}`);
+                    logSuccess(`Connected to RabbitMQ on amqp://${this.ip}:${this.port}`);
 
                     resolve();
                 } catch (err) {

@@ -86,11 +86,16 @@ The configuration for the queues is defined in `src/config/config.js`:
 `.env`:
 ```env
 SIMRIG_ID=1 # Set to 1, 2 or 3 depending on the SimRig
-UDP_PORT=20777
-RABBITMQ_URI=amqp://username:password@localhost:5672
-PANEL_URL=http://localhost:3000 # URL of the Rider Panel remove if not used
-PANEL_SECRET=your_panel_secret # Secret for the Rider Panel remove if not used
-DEV_MODE=false
+UDP_PORT=20777 # Port defined in EA F1 game settings
+RABBITMQ_IP=localhost # IP address of the RabbitMQ server
+RABBITMQ_PORT=5672 # Port of the RabbitMQ server
+RABBITMQ_USER=guest # RabbitMQ username
+RABBITMQ_PASSWORD=guest # RabbitMQ password
+RABBITMQ_VHOST=/ # RabbitMQ virtual host
+PANEL_URL=http://localhost:3000 # URL of the Rider Agent Panel remove if not used
+PANEL_SECRET=your_panel_secret # Secret for the Rider Agent Panel remove if not used
+SEND_LOGS=true # Set to true to send logs to the Rider Agent Panel (suggestion: set to false if development mode is enabled)
+DEV_MODE=false # Set to true to enable development mode
 ```
 
 ## Usage

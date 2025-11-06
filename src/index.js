@@ -1,7 +1,7 @@
 import { CONFIG } from './config/config.js';
 import { MessagingService } from './services/messagingService.js';
 import { TelemetryService } from './services/telemetryService.js';
-import { logDebug, logError } from './utils/logger.js';
+import { configureLogger, logDebug, logError } from './utils/logger.js';
 import readline from 'readline';
 import { constants } from '@z0mt3c/f1-telemetry-client';
 import dotenv from "dotenv";
@@ -25,7 +25,6 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-
 async function startSimRig(simrigId) {
     const simRigConfig = CONFIG.SIM_RIGS[simrigId];
     if (!simRigConfig) {
@@ -34,8 +33,17 @@ async function startSimRig(simrigId) {
         process.exit(1);
     }
 
+    if (process.env.PANEL_URL && process.env.PANEL_SECRET) {
+        configureLogger({
+            panelUrl: process.env.PANEL_URL,
+            panelSecret: process.env.PANEL_SECRET,
+            sendLogs: process.env.SEND_LOGS,
+            simRigId: simrigId
+        });
+    }
+
     const telemetry = new TelemetryService(process.env.UDP_PORT);
-    const messaging = new MessagingService(process.env.RABBITMQ_URI);
+    const messaging = new MessagingService(process.env.RABBITMQ_IP, process.env.RABBITMQ_PORT, process.env.RABBITMQ_VHOST,process.env.RABBITMQ_USER, process.env.RABBITMQ_PASSWORD);
 
     const packetQueuePairs = Object.entries(PACKETS)
         .map(([packetKey, packetType]) => {
@@ -56,7 +64,7 @@ async function startSimRig(simrigId) {
         });
     });
 
-    if(process.env.PANEL_URL != null) {
+    if(process.env.PANEL_URL && process.env.PANEL_SECRET) {
         setInterval(() => {
             sendStatusUpdate(simrigId, {
                 timestamp: Date.now(),
@@ -79,7 +87,9 @@ async function sendStatusUpdate(simrigId, data) {
         });
     } catch (error) {
         if (isDev) {
-            logError("Rider-Panel: " + error);
+            const message = error.response?.data?.message || error.response?.statusText || error.message;
+            const status = error.response?.status;
+            logError(`Rider-Panel [${status}]: ${message}`);
         }
     }
 }
