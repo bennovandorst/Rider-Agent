@@ -43,7 +43,7 @@ async function startSimRig(simrigId) {
     }
 
     const telemetry = new TelemetryService(process.env.UDP_PORT);
-    const messaging = new MessagingService(process.env.RABBITMQ_IP, process.env.RABBITMQ_PORT, process.env.RABBITMQ_VHOST,process.env.RABBITMQ_USER, process.env.RABBITMQ_PASSWORD);
+    const messaging = new MessagingService(process.env.RABBITMQ_IP, process.env.RABBITMQ_PORT, process.env.RABBITMQ_VHOST,process.env.RABBITMQ_USER, process.env.RABBITMQ_PASSWORD, isDev);
 
     const packetQueuePairs = Object.entries(PACKETS)
         .map(([packetKey, packetType]) => {

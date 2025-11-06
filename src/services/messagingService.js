@@ -2,12 +2,13 @@ import amqp from 'amqplib';
 import { logError, logSuccess } from '../utils/logger.js';
 
 export class MessagingService {
-    constructor(ip, port, vhost, user, password) {
+    constructor(ip, port, vhost, user, password, isDev) {
         this.ip = ip;
         this.port = port;
         this.vhost = vhost;
         this.user = user;
         this.password = password;
+        this.isDev = isDev;
         this.connections = {};
         this.channels = {};
         this.connectedPromises = {};
@@ -66,7 +67,9 @@ export class MessagingService {
         try {
             channel.sendToQueue(queue, Buffer.from(JSON.stringify(data)));
         } catch (err) {
-            logError(`Failed to publish message to ${queue}: ${err.message}`);
+            if(this.isDev) {
+                logError(`Failed to publish message to ${queue}: ${err.message}`);
+            }
         }
     }
 }
