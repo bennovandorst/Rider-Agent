@@ -63,7 +63,6 @@ async function startSimRig(simrigId) {
                 devMode: isDev,
                 branch: branch,
                 version: packageJson.version,
-                location: process.env.LOCATION,
             });
         }, 3000);
     }
