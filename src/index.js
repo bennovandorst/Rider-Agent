@@ -74,7 +74,9 @@ async function sendStatusUpdate(simrigId, data) {
     try {
         await axios.post(`${process.env.PANEL_URL}/api/simrig/${simrigId}/status`, data);
     } catch (error) {
-        logError("Rider-Panel: " + error);
+        if (isDev) {
+            logError("Rider-Panel: " + error);
+        }
     }
 }
 
