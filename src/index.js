@@ -72,7 +72,11 @@ async function startSimRig(simrigId) {
 
 async function sendStatusUpdate(simrigId, data) {
     try {
-        await axios.post(`${process.env.PANEL_URL}/v1/api/simrig/${simrigId}/status`, data);
+        await axios.post(`${process.env.PANEL_URL}/v1/api/simrig/${simrigId}/status`, data, {
+            headers: {
+                'x-secret-key': process.env.PANEL_SECRET
+            }
+        });
     } catch (error) {
         if (isDev) {
             logError("Rider-Panel: " + error);
