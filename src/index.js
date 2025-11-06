@@ -63,6 +63,7 @@ async function startSimRig(simrigId) {
                 devMode: isDev,
                 branch: branch,
                 version: packageJson.version,
+                location: process.env.LOCATION,
             });
         }, 3000);
     }
@@ -72,7 +73,7 @@ async function startSimRig(simrigId) {
 
 async function sendStatusUpdate(simrigId, data) {
     try {
-        await axios.post(`${process.env.PANEL_URL}/api/simrig/${simrigId}/status`, data);
+        await axios.post(`${process.env.PANEL_URL}/v1/api/simrig/${simrigId}/status`, data);
     } catch (error) {
         if (isDev) {
             logError("Rider-Panel: " + error);
