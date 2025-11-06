@@ -56,23 +56,27 @@ async function startSimRig(simrigId) {
         });
     });
 
-    setInterval(() => {
-        sendStatusUpdate(simrigId, {
-            timestamp: Date.now(),
-            devMode: isDev,
-            branch: branch,
-            version: packageJson.version,
-        });
-    }, 3000);
+    if(process.env.PANEL_URL != null) {
+        setInterval(() => {
+            sendStatusUpdate(simrigId, {
+                timestamp: Date.now(),
+                devMode: isDev,
+                branch: branch,
+                version: packageJson.version,
+            });
+        }, 3000);
+    }
 
     telemetry.start();
 }
 
 async function sendStatusUpdate(simrigId, data) {
     try {
-        await axios.post(`${process.env.PANEL_URL}/api/simrig/${simrigId}/status`, data);
+        await axios.post(`${process.env.PANEL_URL}/v1/api/simrig/${simrigId}/status`, data);
     } catch (error) {
-        logError("Rider-Panel: " + error);
+        if (isDev) {
+            logError("Rider-Panel: " + error);
+        }
     }
 }
 
