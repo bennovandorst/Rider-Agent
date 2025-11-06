@@ -56,14 +56,16 @@ async function startSimRig(simrigId) {
         });
     });
 
-    setInterval(() => {
-        sendStatusUpdate(simrigId, {
-            timestamp: Date.now(),
-            devMode: isDev,
-            branch: branch,
-            version: packageJson.version,
-        });
-    }, 3000);
+    if(process.env.PANEL_URL != null) {
+        setInterval(() => {
+            sendStatusUpdate(simrigId, {
+                timestamp: Date.now(),
+                devMode: isDev,
+                branch: branch,
+                version: packageJson.version,
+            });
+        }, 3000);
+    }
 
     telemetry.start();
 }
