@@ -1,5 +1,5 @@
 import amqp from 'amqplib';
-import { logError, logSuccess } from '../utils/logger.js';
+import {logError, logInfo, logSuccess} from '../utils/logger.js';
 
 export class MessagingService {
     constructor(ip, port, vhost, user, password, isDev) {
@@ -37,7 +37,7 @@ export class MessagingService {
 
                     for (const queue of queues) {
                         await channel.assertQueue(queue);
-                        logSuccess(`Queue ensured [SimRig ${simRigId}] ${queue}`);
+                        logInfo(`Queue ensured [SimRig ${simRigId}] ${queue}`);
                     }
 
                     this.connections[simRigId] = conn;

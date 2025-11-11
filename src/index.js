@@ -1,16 +1,16 @@
 import { CONFIG } from './config/config.js';
 import { MessagingService } from './services/messagingService.js';
 import { TelemetryService } from './services/telemetryService.js';
-import { configureLogger, logDebug, logError } from './utils/logger.js';
+import {configureLogger, logDebug, logError, logPanel} from './utils/logger.js';
 import readline from 'readline';
 import { constants } from '@z0mt3c/f1-telemetry-client';
 import dotenv from "dotenv";
 import figlet from "figlet";
 import chalk from "chalk";
-import axios from "axios";
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
+import {PanelService} from "./services/panelService.js";
 
 dotenv.config({quiet: true});
 const { PACKETS } = constants;
@@ -44,6 +44,7 @@ async function startSimRig(simrigId) {
 
     const telemetry = new TelemetryService(process.env.UDP_PORT);
     const messaging = new MessagingService(process.env.RABBITMQ_IP, process.env.RABBITMQ_PORT, process.env.RABBITMQ_VHOST,process.env.RABBITMQ_USER, process.env.RABBITMQ_PASSWORD, isDev);
+    const panel = new PanelService(process.env.PANEL_URL, process.env.PANEL_SECRET);
 
     const packetQueuePairs = Object.entries(PACKETS)
         .map(([packetKey, packetType]) => {
@@ -65,34 +66,32 @@ async function startSimRig(simrigId) {
     });
 
     if(process.env.PANEL_URL && process.env.PANEL_SECRET) {
-        setInterval(() => {
-            sendStatusUpdate(simrigId, {
+        logPanel(`Connecting to Rider Panel at ${process.env.PANEL_URL} as SimRig ${simrigId}...`);
+
+        const isConnected = await panel.verifyPanelConnection(simrigId);
+
+        if (isConnected) {
+            await panel.sendStatusUpdate(simrigId, {
                 timestamp: Date.now(),
                 devMode: isDev,
                 branch: branch,
                 version: packageJson.version,
-                isInUse: telemetry.isInUse(),
+                isInUse: telemetry.isInUse()
             });
-        }, 3000);
+
+            setInterval(() => {
+                panel.sendStatusUpdate(simrigId, {
+                    timestamp: Date.now(),
+                    devMode: isDev,
+                    branch: branch,
+                    version: packageJson.version,
+                    isInUse: telemetry.isInUse(),
+                });
+            }, 3000);
+        }
     }
 
     telemetry.start();
-}
-
-async function sendStatusUpdate(simrigId, data) {
-    try {
-        await axios.post(`${process.env.PANEL_URL}/v1/api/simrig/${simrigId}/status`, data, {
-            headers: {
-                'x-secret-key': process.env.PANEL_SECRET
-            }
-        });
-    } catch (error) {
-        if (isDev) {
-            const message = error.response?.data?.message || error.response?.statusText || error.message;
-            const status = error.response?.status;
-            logError(`Rider-Panel [${status}]: ${message}`);
-        }
-    }
 }
 
 const simRigId = process.env.SIMRIG_ID;
