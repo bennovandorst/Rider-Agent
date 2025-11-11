@@ -1,8 +1,6 @@
 import chalk from 'chalk';
 import axios from 'axios';
 
-
-
 let panelUrl = null;
 let panelSecret = null;
 let simRigId = null;
@@ -60,3 +58,8 @@ export const logDebug = msg => {
     console.debug(`${chalk.gray(`[${new Date().toLocaleTimeString()}]`)} ${chalk.yellow('[DEBUG]')} ${msg}`);
     sendLogToPanel('debug', msg);
 };
+
+export const logPanel = msg => {
+    console.log(`${chalk.gray(`[${new Date().toLocaleTimeString()}]`)} ${chalk.magentaBright('[PANEL]')} ${msg}`);
+    sendLogToPanel('panel', msg);
+}
