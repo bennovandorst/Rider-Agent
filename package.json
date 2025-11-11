@@ -17,7 +17,6 @@
     "chalk": "^5.6.2",
     "dotenv": "^17.2.3",
     "figlet": "^1.9.3",
-    "git-rev-sync": "^3.0.2",
-    "mysql2": "^3.15.3"
+    "git-rev-sync": "^3.0.2"
   }
 }
